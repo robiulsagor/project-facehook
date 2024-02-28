@@ -2,8 +2,8 @@ import { Link } from "react-router-dom";
 import Logo from "../../assets/images/logo.svg";
 import Home from "../../assets/icons/home.svg";
 import Notification from "../../assets/icons/notification.svg";
-import Logout from "../../assets/icons/logout.svg";
 import Avatar from "../../assets/images/avatars/avatar_1.png";
+import Logout from "../auth/Logout";
 
 export default function Header() {
   return (
@@ -24,9 +24,8 @@ export default function Header() {
           <button className="icon-btn">
             <img src={Notification} alt="Notification" />
           </button>
-          <button className="icon-btn">
-            <img src={Logout} alt="Logout" />
-          </button>
+
+          <Logout />
 
           <button className="flex-center !ml-8 gap-3">
             <span className="text-lg font-medium lg:text-xl">Sumit</span>
