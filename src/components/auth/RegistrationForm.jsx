@@ -1,33 +1,42 @@
-import { useNavigate } from "react-router-dom";
+import React from "react";
 import Field from "../common/Field";
 import { useForm } from "react-hook-form";
 
-export default function LoginForm() {
+export default function RegistrationForm() {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const navigate = useNavigate();
-
-  const handleLogin = (data) => {
+  const handleRegister = (data) => {
     console.log(data);
-    navigate("/");
   };
 
   return (
     <form
-      className="border-b border-[#3F3F3F] pb-10 lg:pb-[60px]"
-      onSubmit={handleSubmit(handleLogin)}
+      className="border-b border-[#3F3F3F] pb-10 lg:pb-[30px]"
+      onSubmit={handleSubmit(handleRegister)}
     >
+      <Field label="Name" htmlFor="name" error={errors.name}>
+        <input
+          className={`auth-input ${errors.name && "border-red-500"}`}
+          {...register("name", {
+            required: "Name is required!",
+          })}
+          name="name"
+          type="text"
+          id="name"
+        />
+      </Field>
+
       <Field label="Email" htmlFor="email" error={errors.email}>
         <input
           className={`auth-input ${errors.email && "border-red-500"}`}
           {...register("email", {
             required: "Email is required!",
           })}
-          type="text"
+          type="email"
           name="email"
           id="email"
         />
@@ -43,9 +52,25 @@ export default function LoginForm() {
               message: "Password must be at least 6 characters",
             },
           })}
-          type="text"
+          type="password"
           name="password"
           id="password"
+        />
+      </Field>
+
+      <Field
+        label="Confirm Password"
+        htmlFor="confirmPassword"
+        error={errors.confirmPassword}
+      >
+        <input
+          className={`auth-input ${errors.confirmPassword && "border-red-500"}`}
+          {...register("confirmPassword", {
+            required: "Confirm Password is required!",
+          })}
+          type="password"
+          name="confirmPassword"
+          id="confirmPassword"
         />
       </Field>
 
@@ -53,7 +78,7 @@ export default function LoginForm() {
         className="auth-input bg-lwsGreen font-bold text-deepDark transition-all hover:opacity-90"
         type="submit"
       >
-        Login
+        Register
       </button>
     </form>
   );
