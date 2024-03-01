@@ -7,7 +7,11 @@ export default function PrivateRoutes() {
   return auth.user ? (
     <>
       <Header />
-      <Outlet />
+      <main className="mx-auto max-w-[1020px] py-8">
+        <div className="container">
+          <Outlet />
+        </div>
+      </main>
     </>
   ) : (
     <Navigate to="/login" />

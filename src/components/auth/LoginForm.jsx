@@ -28,9 +28,8 @@ export default function LoginForm() {
 
           setAuth({ user, authToken, refreshToken });
           console.log({ user, authToken, refreshToken });
+          navigate("/");
         }
-
-        navigate("/");
       }
     } catch (error) {
       console.log(error);
