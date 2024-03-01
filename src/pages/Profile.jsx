@@ -2,55 +2,57 @@ import { Link } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import { useEffect, useState } from "react";
 import useAxios from "../hooks/useAxios";
+import useProfile from "../hooks/useProfile";
+import { actions } from "../actions";
+import ProfileInfo from "../components/profile/ProfileInfo";
+import MyPosts from "../components/profile/MyPosts";
 
 export default function Profile() {
-  const [user, setUser] = useState({});
-  const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const { state, dispatch } = useProfile();
 
   const { auth } = useAuth();
   const { api } = useAxios();
 
   useEffect(() => {
-    setLoading(true);
-    setError(false);
+    dispatch({
+      type: actions.profile.DATA_FETCHING,
+    });
 
     const fetchProfile = async () => {
       try {
         const response = await api.get(
           `http://localhost:3000/profile/${auth?.user?.id}`
         );
-        console.log(response);
-        setUser(response?.user);
-        setPosts(response?.posts);
+        if (response.status == 200) {
+          dispatch({
+            type: actions.profile.DATA_FETCHED,
+            data: response.data,
+          });
+        }
       } catch (error) {
         console.log(error);
-        setError(error.message);
-      } finally {
-        setLoading(false);
+        dispatch({
+          type: actions.profile.DATA_FETCH_ERROR,
+          error: error.message,
+        });
       }
     };
 
     fetchProfile();
   }, []);
 
-  if (loading) {
+  if (state.loading) {
     return <h2>Loading your profile. please wait...</h2>;
   }
 
-  if (error) {
+  if (state.error) {
     return <h2>Error.. Try refreshing your page</h2>;
   }
 
   return (
-    <div>
-      <h2>Profile</h2>
-      <h2>
-        {auth?.user?.firstName} {auth?.user?.lastName}{" "}
-      </h2>
-
-      <Link to="/">Home</Link>
-    </div>
+    <>
+      <ProfileInfo />
+      <MyPosts />
+    </>
   );
 }

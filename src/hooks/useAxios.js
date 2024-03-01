@@ -11,7 +11,6 @@ export default function useAxios() {
       (config) => {
         const authToken = auth?.authToken;
         config.headers.Authorization = `Beared ${authToken}`;
-        console.log("Old token is oka for now!");
         return config;
       },
       (error) => Promise.reject(error)
@@ -40,7 +39,6 @@ export default function useAxios() {
               refreshToken: newRefreshToken,
             });
 
-            console.log("New token generated!");
             originalRequest.headers.Authorization = `Bearer ${token}`;
             return axios(originalRequest);
           } catch (error) {

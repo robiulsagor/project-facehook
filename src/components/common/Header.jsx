@@ -5,9 +5,13 @@ import Notification from "../../assets/icons/notification.svg";
 import Avatar from "../../assets/images/avatars/avatar_1.png";
 import Logout from "../auth/Logout";
 import useAuth from "../../hooks/useAuth";
+import useProfile from "../../hooks/useProfile";
 
 export default function Header() {
   const { auth } = useAuth();
+  const { state } = useProfile();
+
+  const user = state?.user ?? auth?.user;
 
   return (
     <nav className="sticky top-0 z-50 border-b border-[#3F3F3F] bg-[#1E1F24] py-4">
@@ -31,13 +35,13 @@ export default function Header() {
           <Logout />
 
           <button className="flex-center !ml-8 gap-3">
-            <span className="text-lg font-medium lg:text-xl">
-              {auth?.user?.firstName}
-            </span>
+            <Link to="/me" className="text-lg font-medium lg:text-xl">
+              {user?.firstName}
+            </Link>
             <img
-              className="max-h-[32px] max-w-[32px] lg:max-h-[44px] lg:max-w-[44px]"
-              src={Avatar}
-              alt=""
+              className="h-[32px] w-[32px] lg:h-[44px] lg:w-[44px] rounded-full"
+              src={`http://localhost:3000/${user.avatar}`}
+              alt="user avatar"
             />
           </button>
         </div>

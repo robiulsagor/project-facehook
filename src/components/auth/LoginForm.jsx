@@ -33,10 +33,18 @@ export default function LoginForm() {
       }
     } catch (error) {
       console.log(error);
-      setError("root.random", {
-        type: "random",
-        message: error?.response?.data.error,
-      });
+      console.log(error?.response?.status);
+      if (error?.response?.status == 500) {
+        setError("root.random", {
+          type: "random",
+          message: error?.response?.statusText,
+        });
+      } else {
+        setError("root.random", {
+          type: "random",
+          message: error?.response?.data.error,
+        });
+      }
     }
   };
 
@@ -73,7 +81,7 @@ export default function LoginForm() {
         />
       </Field>
 
-      <p>{errors?.root?.random?.message}</p>
+      <p className="mb-1 text-red-500">{errors?.root?.random?.message}</p>
 
       <button
         className="auth-input bg-lwsGreen font-bold text-deepDark transition-all hover:opacity-90 disabled:opacity-50 "
