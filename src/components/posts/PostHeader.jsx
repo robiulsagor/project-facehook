@@ -4,16 +4,13 @@ import TimeIcon from "../../assets/icons/time.svg";
 import DeleteIcon from "../../assets/icons/delete.svg";
 import useProfile from "../../hooks/useProfile";
 import { getPostTimeDiff } from "../../utils/getPostTimeDifference";
-
-import { formatDistanceToNow } from "date-fns";
+import { useState } from "react";
 
 export default function PostHeader({ post }) {
   const { state } = useProfile();
+  const result = getPostTimeDiff(post?.createAt);
 
-  console.log(post);
-
-  //   getPostTimeDiff(post?.createAt);
-  const result = formatDistanceToNow(new Date(post?.createAt));
+  const [isActionActive, setIsActionActive] = useState(false);
 
   return (
     <header className="flex items-center justify-between gap-4">
@@ -27,28 +24,31 @@ export default function PostHeader({ post }) {
           <h6 className="text-lg lg:text-xl">Sumit Saha</h6>
           <div className="flex items-center gap-1.5">
             <img src={TimeIcon} alt="time" />
-            <span className="text-sm text-gray-400 lg:text-base">
-              {result} ago
-            </span>
+            <span className="text-sm text-gray-400 lg:text-base">{result}</span>
           </div>
         </div>
       </div>
 
       <div className="relative">
-        <button>
+        <button
+          type="button"
+          onClick={() => setIsActionActive((prev) => !prev)}
+        >
           <img src={ThreeDotIcon} alt="3dots of Action" />
         </button>
 
-        <div className="action-modal-container">
-          <button className="action-menu-item hover:text-lwsGreen">
-            <img src={EditIcon} alt="Edit" />
-            Edit
-          </button>
-          <button className="action-menu-item hover:text-red-500">
-            <img src={DeleteIcon} alt="Delete" />
-            Delete
-          </button>
-        </div>
+        {isActionActive && (
+          <div className="action-modal-container">
+            <button className="action-menu-item hover:text-lwsGreen">
+              <img src={EditIcon} alt="Edit" />
+              Edit
+            </button>
+            <button className="action-menu-item hover:text-red-500">
+              <img src={DeleteIcon} alt="Delete" />
+              Delete
+            </button>
+          </div>
+        )}
       </div>
     </header>
   );
