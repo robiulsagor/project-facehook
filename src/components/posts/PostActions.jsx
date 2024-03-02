@@ -1,21 +1,45 @@
 import LikeIcon from "../../assets/icons/like.svg";
 import CommentIcon from "../../assets/icons/comment.svg";
 import ShareIcon from "../../assets/icons/share.svg";
+import useAxios from "../../hooks/useAxios";
+import { useEffect, useState } from "react";
 
 export default function PostActions({ postId, commentCount }) {
+  const { api } = useAxios();
+  const [liked, setLiked] = useState(false);
+
+  // useEffect(() => {
+
+  // }, []);
+
+  const handleLikePost = async (postId) => {
+    setLiked((prev) => !prev);
+    try {
+      const response = await api.patch(
+        `http://localhost:3000/posts/${postId}/like`
+      );
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <div class="flex items-center justify-between py-6 lg:px-10 lg:py-8">
-      <button class="flex-center gap-2 text-xs font-bold text-[#B8BBBF] hover:text-white lg:text-sm">
+    <div className="flex items-center justify-between py-6 lg:px-10 lg:py-8">
+      <button
+        className="flex-center gap-2 text-xs font-bold text-[#B8BBBF] hover:text-white lg:text-sm"
+        onClick={() => handleLikePost(postId)}
+      >
         <img src={LikeIcon} alt="Like" />
-        <span>Like</span>
+        <span>Like{liked ? "d" : ""}</span>
       </button>
 
-      <button class="icon-btn space-x-2 px-6 py-3 text-xs lg:px-12 lg:text-sm">
+      <button className="icon-btn space-x-2 px-6 py-3 text-xs lg:px-12 lg:text-sm">
         <img src={CommentIcon} alt="Comment" />
-        <span>Comment({commentCount})</span>
+        <span>Comment({commentCount ?? 0})</span>
       </button>
 
-      <button class="flex-center gap-2 text-xs font-bold text-[#B8BBBF] hover:text-white lg:text-sm">
+      <button className="flex-center gap-2 text-xs font-bold text-[#B8BBBF] hover:text-white lg:text-sm">
         <img src={ShareIcon} alt="Share" />
         <span>Share</span>
       </button>
