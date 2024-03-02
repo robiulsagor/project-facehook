@@ -23,6 +23,13 @@ export const postReducer = (state, action) => {
       };
     }
 
+    case actions.post.POST_CREATED: {
+      return {
+        ...state,
+        loading: false,
+        posts: [...state.posts, action.data],
+      };
+    }
     case actions.post.DATA_FETCH_ERROR: {
       return {
         ...state,

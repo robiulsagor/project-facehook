@@ -1,13 +1,14 @@
 import { Link } from "react-router-dom";
 import Header from "../components/common/Header";
-import { useEffect, useReducer } from "react";
-import { initialState, postReducer } from "../reducers/PostReducer";
+import { useEffect } from "react";
 import { actions } from "../actions";
 import useAxios from "../hooks/useAxios";
 import PostList from "../components/posts/PostList";
+import usePost from "../hooks/usePost";
+import NewPost from "../components/posts/NewPost";
 
 export default function Homepage() {
-  const [state, dispatch] = useReducer(postReducer, initialState);
+  const { state, dispatch } = usePost();
   const { api } = useAxios();
 
   useEffect(() => {
@@ -40,6 +41,7 @@ export default function Homepage() {
 
   return (
     <>
+      <NewPost />
       <PostList posts={state?.posts} />
     </>
   );
