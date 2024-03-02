@@ -4,10 +4,10 @@ import PostBody from "./PostBody";
 import PostActions from "./PostActions";
 import PostComments from "./PostComments";
 
-export default function PostCard() {
+export default function PostCard({ post }) {
   return (
     <article className="card mt-6 lg:mt-8">
-      <PostHeader />
+      <PostHeader post={post} />
       <PostBody />
       <PostActions />
       <PostComments />

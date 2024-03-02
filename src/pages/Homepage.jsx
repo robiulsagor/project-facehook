@@ -5,7 +5,6 @@ import useAuth from "../hooks/useAuth";
 export default function Homepage() {
   const { auth } = useAuth();
 
-  console.log(auth);
   return (
     <>
       <h2>Helllo....</h2>
