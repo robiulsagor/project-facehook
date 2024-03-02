@@ -1,8 +1,6 @@
 import React from "react";
 
 export default function PostCommentLists({ comments }) {
-  console.log(comments);
-
   return (
     <div className="space-y-4 divide-y divide-lighterDark pl-2 lg:pl-3">
       {!!comments &&

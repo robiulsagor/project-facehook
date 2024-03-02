@@ -2,10 +2,33 @@ import { useState } from "react";
 import useAvatar from "../../hooks/useAvatar";
 import PostCommentLists from "./PostCommentLists";
 import useAuth from "../../hooks/useAuth";
+import useAxios from "../../hooks/useAxios";
 
 export default function PostComments({ post }) {
   const { auth } = useAuth();
+  const { api } = useAxios();
   const [showComments, setShowComments] = useState(false);
+  const [comments, setComments] = useState(post?.comments);
+  const [comment, setComment] = useState("");
+
+  const addComment = async (e) => {
+    const keyCode = e.keyCode;
+
+    if (keyCode === 13) {
+      try {
+        const response = await api.patch(
+          `http://localhost:3000/posts/${post?.id}/comment`,
+          { comment }
+        );
+        if (response.status == 200) {
+          setComments([...response?.data?.comments]);
+          setComment("");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
 
   return (
     <div>
@@ -22,6 +45,9 @@ export default function PostComments({ post }) {
             className="h-8 w-full rounded-full bg-lighterDark px-4 text-xs focus:outline-none sm:h-[38px]"
             name="post"
             id="post"
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            onKeyDown={(e) => addComment(e)}
             placeholder="What's on your mind?"
           />
         </div>
@@ -35,7 +61,7 @@ export default function PostComments({ post }) {
         </button>
       </div>
 
-      {showComments && <PostCommentLists comments={post?.comments} />}
+      {showComments && <PostCommentLists comments={comments} />}
     </div>
   );
 }
