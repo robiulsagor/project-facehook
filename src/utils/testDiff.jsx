@@ -1,4 +1,4 @@
-export const getPostTimeDiff = (time) => {
+export const testTimeDiff = (time) => {
   let diff = new Date().getTime() - new Date(time).getTime();
 
   let diffInS = diff / 1000;
@@ -22,19 +22,19 @@ export const getPostTimeDiff = (time) => {
     message = `${year} years`;
   }
 
-  if (year == 0 && month > 0) {
-    message = `${message} ${month} months`;
+  if (year <= 0 && month > 0) {
+    message = `${message} ${month} month`;
   }
 
-  if (year == 0 && month == 0 && day > 0) {
-    message = `${message} ${day} days`;
+  if (month <= 0 && day > 0) {
+    message = `${message} ${day} day`;
   }
 
-  if (year == 0 && month == 0 && day == 0 && hour > 0) {
-    message = `${message} ${hour} hours`;
+  if (day <= 0 && hour > 0) {
+    message = `${message} ${hour} hour`;
   }
 
-  if (year == 0 && month == 0 && day == 0 && hour == 0 && min > 0) {
+  if (hour <= 0 && min > 0) {
     message = `${message} ${min} min`;
   }
 
