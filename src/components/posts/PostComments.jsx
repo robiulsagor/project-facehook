@@ -1,9 +1,10 @@
 import { useState } from "react";
 import useAvatar from "../../hooks/useAvatar";
 import PostCommentLists from "./PostCommentLists";
+import useAuth from "../../hooks/useAuth";
 
 export default function PostComments({ post }) {
-  const { avatarUrl } = useAvatar(post);
+  const { auth } = useAuth();
   const [showComments, setShowComments] = useState(false);
 
   return (
@@ -11,7 +12,7 @@ export default function PostComments({ post }) {
       <div className="flex-center mb-3 gap-2 lg:gap-4">
         <img
           className="w-7 h-7 rounded-full lg:h-[34px] lg:w-[34px]"
-          src={avatarUrl}
+          src={`http://localhost:3000/${auth?.user?.avatar}`}
           alt="avatar"
         />
 

@@ -40,7 +40,11 @@ export default function Header() {
             </Link>
             <img
               className="h-[32px] w-[32px] lg:h-[44px] lg:w-[44px] rounded-full"
-              src={`http://localhost:3000/${user.avatar}`}
+              src={
+                user?.avatar
+                  ? `http://localhost:3000/${user.avatar}`
+                  : "https://learnwithsumit.com/_next/static/media/lws-logo-dark.8e393acf.svg"
+              }
               alt="user avatar"
             />
           </button>

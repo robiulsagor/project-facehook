@@ -17,7 +17,6 @@ export default function ProfileImg() {
 
   const uploadFile = async () => {
     try {
-      console.log(fileRef.current.files);
       const formData = new FormData();
 
       for (const file of fileRef.current.files) {

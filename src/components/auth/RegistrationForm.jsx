@@ -1,16 +1,32 @@
 import React from "react";
 import Field from "../common/Field";
 import { useForm } from "react-hook-form";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function RegistrationForm() {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm();
 
-  const handleRegister = (data) => {
-    console.log(data);
+  const navigate = useNavigate();
+
+  const handleRegister = async (formData) => {
+    try {
+      const response = await axios.post("/auth/register", formData);
+      if (response.status === 201) {
+        navigate("/login");
+      }
+    } catch (error) {
+      console.log(error);
+      setError("root.random", {
+        type: "random",
+        message: `Something went wrong: ${error.response?.data?.error ?? ""}`,
+      });
+    }
   };
 
   return (
@@ -18,15 +34,27 @@ export default function RegistrationForm() {
       className="border-b border-[#3F3F3F] pb-10 lg:pb-[30px]"
       onSubmit={handleSubmit(handleRegister)}
     >
-      <Field label="Name" htmlFor="name" error={errors.name}>
+      <Field label="First Name" htmlFor="firstName" error={errors.firstName}>
         <input
           className={`auth-input ${errors.name && "border-red-500"}`}
-          {...register("name", {
-            required: "Name is required!",
+          {...register("firstName", {
+            required: "First Name is required!",
           })}
-          name="name"
+          name="firstName"
           type="text"
-          id="name"
+          id="firstName"
+        />
+      </Field>
+
+      <Field label="Last Name" htmlFor="lastName" error={errors.lastName}>
+        <input
+          className={`auth-input ${errors.name && "border-red-500"}`}
+          {...register("lastName", {
+            required: "Last Name is required!",
+          })}
+          name="lastName"
+          type="text"
+          id="lastName"
         />
       </Field>
 
@@ -58,21 +86,7 @@ export default function RegistrationForm() {
         />
       </Field>
 
-      <Field
-        label="Confirm Password"
-        htmlFor="confirmPassword"
-        error={errors.confirmPassword}
-      >
-        <input
-          className={`auth-input ${errors.confirmPassword && "border-red-500"}`}
-          {...register("confirmPassword", {
-            required: "Confirm Password is required!",
-          })}
-          type="password"
-          name="confirmPassword"
-          id="confirmPassword"
-        />
-      </Field>
+      <p className="mb-2 text-red-500">{errors?.root?.random?.message}</p>
 
       <button
         className="auth-input bg-lwsGreen font-bold text-deepDark transition-all hover:opacity-90"

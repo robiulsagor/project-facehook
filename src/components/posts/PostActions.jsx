@@ -1,24 +1,25 @@
 import LikeIcon from "../../assets/icons/like.svg";
+import LikeFilledIcon from "../../assets/icons/like-filled.svg";
 import CommentIcon from "../../assets/icons/comment.svg";
 import ShareIcon from "../../assets/icons/share.svg";
 import useAxios from "../../hooks/useAxios";
 import { useEffect, useState } from "react";
+import useAuth from "../../hooks/useAuth";
 
-export default function PostActions({ postId, commentCount }) {
+export default function PostActions({ postId, post, commentCount }) {
+  const { auth } = useAuth();
   const { api } = useAxios();
-  const [liked, setLiked] = useState(false);
-
-  // useEffect(() => {
-
-  // }, []);
+  const [liked, setLiked] = useState(post?.likes?.includes(auth?.user?.id));
 
   const handleLikePost = async (postId) => {
-    setLiked((prev) => !prev);
     try {
       const response = await api.patch(
         `http://localhost:3000/posts/${postId}/like`
       );
-      console.log(response);
+
+      if (response.status == 200) {
+        setLiked((prev) => !prev);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -30,8 +31,12 @@ export default function PostActions({ postId, commentCount }) {
         className="flex-center gap-2 text-xs font-bold text-[#B8BBBF] hover:text-white lg:text-sm"
         onClick={() => handleLikePost(postId)}
       >
-        <img src={LikeIcon} alt="Like" />
-        <span>Like{liked ? "d" : ""}</span>
+        <img
+          className="w-6"
+          src={liked ? LikeFilledIcon : LikeIcon}
+          alt="Like"
+        />
+        {!liked && <span>Like</span>}
       </button>
 
       <button className="icon-btn space-x-2 px-6 py-3 text-xs lg:px-12 lg:text-sm">
