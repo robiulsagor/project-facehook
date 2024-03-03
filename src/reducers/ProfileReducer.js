@@ -1,6 +1,6 @@
 import { actions } from "../actions";
 
-export const initalState = {
+export const initialState = {
   user: null,
   posts: [],
   loading: false,
