@@ -1,5 +1,3 @@
-import { Link } from "react-router-dom";
-import Header from "../components/common/Header";
 import { useEffect } from "react";
 import { actions } from "../actions";
 import useAxios from "../hooks/useAxios";
@@ -17,10 +15,17 @@ export default function Homepage() {
     const fetchPosts = async () => {
       try {
         const response = await api.get("http://localhost:3000/posts");
+
         if (response.status === 200) {
+          const sortedPosts = [...response.data].sort((a, b) => {
+            const dateA = new Date(a.createAt);
+            const dateB = new Date(b.createAt);
+            return dateB - dateA; // Newer post comes first
+          });
+
           dispatch({
             type: actions.post.DATA_FETCHED,
-            data: response.data,
+            data: sortedPosts,
           });
         }
       } catch (error) {

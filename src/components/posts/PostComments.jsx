@@ -3,9 +3,13 @@ import useAvatar from "../../hooks/useAvatar";
 import PostCommentLists from "./PostCommentLists";
 import useAuth from "../../hooks/useAuth";
 import useAxios from "../../hooks/useAxios";
+import useProfile from "../../hooks/useProfile";
 
 export default function PostComments({ post }) {
   const { auth } = useAuth();
+  const { state } = useProfile();
+  const user = state?.user ?? auth?.user;
+
   const { api } = useAxios();
   const [showComments, setShowComments] = useState(false);
   const [comments, setComments] = useState(post?.comments);
@@ -35,7 +39,7 @@ export default function PostComments({ post }) {
       <div className="flex-center mb-3 gap-2 lg:gap-4">
         <img
           className="w-7 h-7 rounded-full lg:h-[34px] lg:w-[34px]"
-          src={`http://localhost:3000/${auth?.user?.avatar}`}
+          src={`http://localhost:3000/${user?.avatar}`}
           alt="avatar"
         />
 
