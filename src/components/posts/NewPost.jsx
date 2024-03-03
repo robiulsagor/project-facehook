@@ -2,17 +2,26 @@ import React, { useState } from "react";
 import useAuth from "../../hooks/useAuth";
 import PostEntry from "./PostEntry";
 import useProfile from "../../hooks/useProfile";
+import useEditPost from "../../hooks/useEditPost";
 
 export default function NewPost() {
-  const [showEntry, setShowEntry] = useState(false);
+  // const [showEntry, setShowEntry] = useState(false);
+  const { mode, setMode, postId, setPostId } = useEditPost();
   const { auth } = useAuth();
   const { state } = useProfile();
   const user = state?.user ?? auth?.user;
 
   return (
     <>
-      {showEntry ? (
-        <PostEntry onAdd={() => setShowEntry(false)} />
+      {mode !== null ? (
+        <PostEntry
+          onAdd={() => {
+            setMode(null);
+            setPostId("");
+          }}
+          mode={mode}
+          postId={postId}
+        />
       ) : (
         <div className="card">
           <div className="flex-center mb-3 gap-2 lg:gap-4">
@@ -27,7 +36,7 @@ export default function NewPost() {
                 className="h-16 w-full rounded-md bg-lighterDark p-3 focus:outline-none sm:h-20 sm:p-6"
                 name="post"
                 id="post"
-                onClick={() => setShowEntry(true)}
+                onClick={() => setMode("create")}
                 placeholder="What's on your mind?"
               ></textarea>
             </div>

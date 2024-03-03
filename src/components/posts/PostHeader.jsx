@@ -2,17 +2,53 @@ import ThreeDotIcon from "../../assets/icons/3dots.svg";
 import EditIcon from "../../assets/icons/edit.svg";
 import TimeIcon from "../../assets/icons/time.svg";
 import DeleteIcon from "../../assets/icons/delete.svg";
-import useProfile from "../../hooks/useProfile";
 import { getPostTimeDiff } from "../../utils/getPostTimeDifference";
 import { useState } from "react";
 import useAvatar from "../../hooks/useAvatar";
+import useAuth from "../../hooks/useAuth";
+import useAxios from "../../hooks/useAxios";
+import usePost from "../../hooks/usePost";
+import { actions } from "../../actions";
+import useEditPost from "../../hooks/useEditPost";
 
 export default function PostHeader({ post }) {
-  const { state } = useProfile();
+  const { mode, setMode, setPostId } = useEditPost();
+
+  const { auth } = useAuth();
   const { avatarUrl } = useAvatar(post);
+  const { api } = useAxios();
   const result = getPostTimeDiff(post?.createAt);
+  const { dispatch } = usePost();
 
   const [isActionActive, setIsActionActive] = useState(false);
+
+  const isMe = post?.author?.id === auth?.user?.id;
+
+  const handleDelete = async () => {
+    if (window.confirm("Are you sure to delete this post?")) {
+      try {
+        const response = await api.delete(
+          `http://localhost:3000/posts/${post.id}`
+        );
+        if (response.status == 200) {
+          dispatch({
+            type: actions.post.POST_DELETED,
+            data: post?.id,
+          });
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      setIsActionActive(false);
+    }
+  };
+
+  const initiatPostEdit = () => {
+    setMode("update");
+    setPostId(post?.id);
+    setIsActionActive(false);
+  };
 
   return (
     <header className="flex items-center justify-between gap-4">
@@ -32,20 +68,28 @@ export default function PostHeader({ post }) {
       </div>
 
       <div className="relative">
-        <button
-          type="button"
-          onClick={() => setIsActionActive((prev) => !prev)}
-        >
-          <img src={ThreeDotIcon} alt="3dots of Action" />
-        </button>
+        {isMe && (
+          <button
+            type="button"
+            onClick={() => setIsActionActive((prev) => !prev)}
+          >
+            <img src={ThreeDotIcon} alt="3dots of Action" />
+          </button>
+        )}
 
         {isActionActive && (
           <div className="action-modal-container">
-            <button className="action-menu-item hover:text-lwsGreen">
+            <button
+              onClick={initiatPostEdit}
+              className="action-menu-item hover:text-lwsGreen"
+            >
               <img src={EditIcon} alt="Edit" />
               Edit
             </button>
-            <button className="action-menu-item hover:text-red-500">
+            <button
+              onClick={handleDelete}
+              className="action-menu-item hover:text-red-500"
+            >
               <img src={DeleteIcon} alt="Delete" />
               Delete
             </button>
