@@ -15,6 +15,7 @@ export const getPostTimeDiff = (time) => {
   const day = Math.floor((diffInS % monthInSec) / dayInSec);
   const hour = Math.floor((diffInS % dayInSec) / hourInSec);
   const min = Math.floor((diffInS % hourInSec) / minInSec);
+  const sec = Math.floor(diffInS % minInSec);
 
   let message = "";
 
@@ -36,6 +37,17 @@ export const getPostTimeDiff = (time) => {
 
   if (year == 0 && month == 0 && day == 0 && hour == 0 && min > 0) {
     message = `${message} ${min} min`;
+  }
+
+  if (
+    year == 0 &&
+    month == 0 &&
+    day == 0 &&
+    hour == 0 &&
+    min == 0 &&
+    sec >= 0
+  ) {
+    message = `${message} ${sec} seconds`;
   }
 
   return `${message} ago`;
