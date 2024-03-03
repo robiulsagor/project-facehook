@@ -1,21 +1,24 @@
 import React, { useState } from "react";
 import useAuth from "../../hooks/useAuth";
 import PostEntry from "./PostEntry";
+import useProfile from "../../hooks/useProfile";
 
 export default function NewPost() {
   const [showEntry, setShowEntry] = useState(false);
   const { auth } = useAuth();
+  const { state } = useProfile();
+  const user = state?.user ?? auth?.user;
 
   return (
     <>
       {showEntry ? (
-        <PostEntry auth={auth} />
+        <PostEntry onAdd={() => setShowEntry(false)} />
       ) : (
         <div className="card">
           <div className="flex-center mb-3 gap-2 lg:gap-4">
             <img
               className="w-10 h-10 rounded-full lg:h-[58px] lg:w-[58px]"
-              src={`http://localhost:3000/${auth?.user?.avatar}`}
+              src={`http://localhost:3000/${user?.avatar}`}
               alt="avatar"
             />
 
